@@ -1,0 +1,42 @@
+version: '3.3'
+services:
+  db:
+    image: postgres:14.4
+    container_name: db
+    ports:
+      - ${DB_PORT}:${DB_PORT}
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - ./postgresql.conf:/etc/postgresql/postgresql.conf
+    networks:
+      - local
+  gateway:
+    container_name: gw
+    build: ./gateway
+    ports:
+      - ${GATEWAY_PORT}:${GATEWAY_PORT}
+    networks:
+      - local
+  user_service:
+    container_name: us
+    build: ./user_service
+    ports:
+      - ${USER_SERVICE_PORT}:${USER_SERVICE_PORT}\
+    networks:
+      - local
+  finance_service:
+    container_name: fs
+    build: ./finance_service
+    ports:
+      - ${FINANCE_SERVICE_PORT}:${FINANCE_SERVICE_PORT}
+    networks:
+      - local
+
+
+
+networks:
+  local:
+    driver: bridge
