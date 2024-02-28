@@ -18,7 +18,7 @@ func NewRouter(controller *controller.Controller) *Router {
 
 func (router *Router) Router() *chi.Mux {
 	r := chi.NewRouter()
-	r.Route("/api", func(r chi.Router) {
+	r.Route("/finance", func(r chi.Router) {
 		r.Get("/conis", router.controller.GetCoinst)
 	})
 	return r

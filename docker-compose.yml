@@ -1,5 +1,20 @@
 version: '3.3'
 services:
+  nginx:
+    container_name: nginx
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    volumes:
+      - ./volumes/log/:/var/log/nginx/
+    restart: always
+    depends_on:
+      user_service:
+        condition: service_started
+      finance_service:
+        condition: service_started
+    networks:
+      - local
   db:
     image: postgres:14.4
     container_name: db
@@ -11,13 +26,6 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
     volumes:
       - ./postgresql.conf:/etc/postgresql/postgresql.conf
-    networks:
-      - local
-  gateway:
-    container_name: gw
-    build: ./gateway
-    ports:
-      - ${GATEWAY_PORT}:${GATEWAY_PORT}
     networks:
       - local
   user_service:
@@ -34,9 +42,6 @@ services:
       - ${FINANCE_SERVICE_PORT}:${FINANCE_SERVICE_PORT}
     networks:
       - local
-
-
-
 networks:
   local:
     driver: bridge

@@ -17,7 +17,7 @@ func NewRouter(controllers *internal.Controllers) *Router {
 
 func (r *Router) Route() *chi.Mux {
 	router := chi.NewRouter()
-	router.Route("/api", func(router chi.Router) {
+	router.Route("/user", func(router chi.Router) {
 		router.Post("/login", r.Controllers.UserContorller.Register)
 		router.Post("/register", r.Controllers.UserContorller.Login)
 		router.Post("/auth", r.Controllers.UserContorller.Auth)
