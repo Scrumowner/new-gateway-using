@@ -3,6 +3,7 @@ package migrator
 import (
 	"fmt"
 	"github.com/jmoiron/sqlx"
+	"log"
 	"user_service/internal/models"
 )
 
@@ -18,5 +19,8 @@ func NewMigrator(db *sqlx.DB) *Migrator {
 func (m *Migrator) Migrate(tabler models.User) {
 	tn := tabler.TableName()
 	query := fmt.Sprintf("CREATE TABLE IF NOT EXISTS %s ( username text, email text, password text);", tn)
-	m.db.Exec(query)
+	_, err := m.db.Exec(query)
+	if err != nil {
+		log.Fatalln("CAN'T CREATE TABLE", tn)
+	}
 }
